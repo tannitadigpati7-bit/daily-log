@@ -1,0 +1,28 @@
+name: Daily Log Commit
+
+on:
+  schedule:
+    # Runs once a day at 09:00 UTC. Edit to your preferred time.
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  commit-log:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Append today's entry
+        run: |
+          echo "$(date -u +'%Y-%m-%d %H:%M UTC') - daily log entry" >> log.md
+
+      - name: Commit and push
+        run: |
+          git config user.name "tannitadigpati7-bit"
+          git config user.email "tannitadigpati791@gmail.com"
+          git add log.md
+          git commit -m "Daily log: $(date -u +'%Y-%m-%d')"
+          git push
